@@ -8,10 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DomainChat.Contexts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatAPI
 {
@@ -27,6 +30,44 @@ namespace ChatAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Database Connection
+            services.AddEntityFrameworkNpgsql().AddDbContext<ChatDbContext>(opt =>
+                opt.UseNpgsql(Configuration.GetConnectionString("ChatConnection"),
+                x => x.MigrationsAssembly("DomainChat"))
+            );
+
+            //Authentication
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
+
+            // Validation
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (context) =>
+                {
+                    List<object> errorModels = new List<object>();
+
+                    foreach (var modelStateKey in context.ModelState.Keys)
+                    {
+                        var modelStateVal = context.ModelState[modelStateKey];
+
+                        foreach (var error in modelStateVal.Errors)
+                        {
+                            errorModels.Add(new { Field = modelStateKey, Message = error.ErrorMessage });
+                        }
+                    }
+
+                    return new UnprocessableEntityObjectResult(errorModels);
+                };
+            });
 
             // Swagger UI
             services.AddSwaggerGen(c =>
@@ -61,8 +102,9 @@ namespace ChatAPI
                 });
             });
 
-            services.AddControllers();
+                services.AddControllers();
                 services.AddSignalR();
+                services.AddHttpContextAccessor();
                 services.AddSingleton(typeof(ILogger), typeof(Logger<Startup>));
             }
 
