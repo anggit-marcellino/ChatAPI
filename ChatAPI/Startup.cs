@@ -15,6 +15,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DomainChat.Contexts;
 using Microsoft.IdentityModel.Tokens;
+using DomainChat.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace ChatAPI
 {
@@ -36,6 +38,17 @@ namespace ChatAPI
                 x => x.MigrationsAssembly("DomainChat"))
             );
 
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ChatDbContext>(); ;
+            services.Configure<IdentityOptions>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 4;
+                }
+            );
+
             //Authentication
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -47,27 +60,6 @@ namespace ChatAPI
                         ValidateAudience = false
                     };
                 });
-
-            // Validation
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (context) =>
-                {
-                    List<object> errorModels = new List<object>();
-
-                    foreach (var modelStateKey in context.ModelState.Keys)
-                    {
-                        var modelStateVal = context.ModelState[modelStateKey];
-
-                        foreach (var error in modelStateVal.Errors)
-                        {
-                            errorModels.Add(new { Field = modelStateKey, Message = error.ErrorMessage });
-                        }
-                    }
-
-                    return new UnprocessableEntityObjectResult(errorModels);
-                };
-            });
 
             // Swagger UI
             services.AddSwaggerGen(c =>

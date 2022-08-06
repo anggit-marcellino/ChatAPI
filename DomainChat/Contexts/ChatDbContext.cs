@@ -9,16 +9,11 @@ namespace DomainChat.Contexts
 {
     public class ChatDbContext : IdentityDbContext
     {
+        public ChatDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
-
-        public ChatDbContext(DbContextOptions<ChatDbContext> options) : base(options) 
-        {
-        
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-          
-        }
     }
 }
