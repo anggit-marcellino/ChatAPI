@@ -1,22 +1,21 @@
 using ChatAPI.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DomainChat.Contexts;
 using Microsoft.IdentityModel.Tokens;
 using DomainChat.Entities;
 using Microsoft.AspNetCore.Identity;
+using Autofac;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using DomainChat.AppSetting;
+using Microsoft.AspNetCore.Http.Connections;
+using Autofac.Extensions.DependencyInjection;
 
 namespace ChatAPI
 {
@@ -28,10 +27,13 @@ namespace ChatAPI
         }
 
         public IConfiguration Configuration { get; }
+        public IContainer ApplicationContainer { get; private set; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             // Database Connection
             services.AddEntityFrameworkNpgsql().AddDbContext<ChatDbContext>(opt =>
                 opt.UseNpgsql(Configuration.GetConnectionString("ChatConnection"),
@@ -39,6 +41,9 @@ namespace ChatAPI
             );
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ChatDbContext>(); ;
+
+            services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
+
             services.Configure<IdentityOptions>(options =>
                 {
                     options.Password.RequireDigit = false;
@@ -49,83 +54,75 @@ namespace ChatAPI
                 }
             );
 
-            //Authentication
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = "https://localhost:5001";
+            //Jwt Authentication
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
-                });
-
-            // Swagger UI
-            services.AddSwaggerGen(c =>
+            services.AddAuthentication(x =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChatApi", Version = "v1" });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = false;
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-
-                        },
-                        new List<string>()
-                    }
-                });
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
-                services.AddControllers();
-                services.AddSignalR();
-                services.AddHttpContextAccessor();
-                services.AddSingleton(typeof(ILogger), typeof(Logger<Startup>));
-            }
+            services.AddSignalR();
+
+            services.AddControllers();
+
+            services.AddOptions();
+
+            services.AddSwaggerGen();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.DefaultModelsExpandDepth(-1);
-                    c.DisplayRequestDuration();
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChatAPI v1");
-                });
+
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
-            app.UseAuthorization();
+             app.UseCors(builder =>
+             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4500")
+             .AllowAnyHeader()
+             .AllowAnyMethod()
+             .AllowCredentials()
 
+             );
+
+            // can use the convenience extension method GetAutofacRoot.
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/chatsocket");
+                endpoints.MapHub<ChatHub>("/chathub", options =>
+                {
+                    options.Transports =
+                        HttpTransportType.WebSockets |
+                        HttpTransportType.LongPolling;
+                });
             });
+
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "ChatAPI V1"); });
+
         }
     }
 }
