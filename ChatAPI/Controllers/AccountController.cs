@@ -92,7 +92,7 @@ namespace ChatAPI.Controllers
                     user.IsOnline = true;
                     return Ok(new { token, user });
                 }
-                catch (Exception exp)
+                catch (Exception)
                 {
                     throw;
                 }

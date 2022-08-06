@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DomainChat.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20220806180835_DomainChat")]
+    [Migration("20220806190001_DomainChat")]
     partial class DomainChat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
