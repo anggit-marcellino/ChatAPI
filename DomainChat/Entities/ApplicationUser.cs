@@ -1,17 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DomainChat.Entities
 {
-    public class ApplicationUser 
+    public class ApplicationUser : IdentityUser
     {
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        [Column(TypeName = "varchar(150)")]
         public string FirstName { get; set; }
+
+        [Column(TypeName = "varchar(150)")]
         public string LastName { get; set; }
-        public bool IsOnline { get; set; } = false;
-        public string Role { get; set; }
+        public bool IsOnline { get; set; }
+
     }
 }

@@ -6,12 +6,13 @@ namespace DomainChat.Entities
 {
     public class Message
     {
-        public string  Sender { get; set; }
+        public string Id { get; set; }
+        public string Sender { get; set; }
         public string Receiver { get; set; }
-        public  DateTime MessageDate { get; set; }
+        public DateTime MessageDate { get; set; }
         public string Content { get; set; }
-        public bool IsNew { get; set; } = false;
-        public bool IsSenderDelete { get; set; } = false;
-        public bool IsReceiverDeleted { get; set; } = false;
+        public bool IsNew { get; set; }
+        public bool IsSenderDeleted { get; set; }
+        public bool IsReceiverDeleted { get; set; }
     }
 }
