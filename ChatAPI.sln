@@ -11,15 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{A0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A3B22361-BCF4-4B9A-A29B-4EAF860D2B9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAPI.Core", "ChatAPI.Core\ChatAPI.Core.csproj", "{ED1D968C-0B99-47AF-80D6-5D12DBC91632}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatAPI.Core", "ChatAPI.Core\ChatAPI.Core.csproj", "{ED1D968C-0B99-47AF-80D6-5D12DBC91632}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{361646BA-6D4D-4C50-961A-C1034D1B6FB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAPI.DataRepositories", "ChatAPI.DataRepositories\ChatAPI.DataRepositories.csproj", "{2AE19B48-8C74-49E4-80D0-EAD16E0A18E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatAPI.DataRepositories", "ChatAPI.DataRepositories\ChatAPI.DataRepositories.csproj", "{2AE19B48-8C74-49E4-80D0-EAD16E0A18E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAPI.Business", "ChatAPI.Business\ChatAPI.Business.csproj", "{B3600CF6-B599-49B8-9025-6E8643D049CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatAPI.Business", "ChatAPI.Business\ChatAPI.Business.csproj", "{B3600CF6-B599-49B8-9025-6E8643D049CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAPI.DependencyResolver", "ChatAPI.DependencyResolver\ChatAPI.DependencyResolver.csproj", "{718C8031-9153-4AB3-9053-84BEDFEA4713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatAPI.DependencyResolver", "ChatAPI.DependencyResolver\ChatAPI.DependencyResolver.csproj", "{718C8031-9153-4AB3-9053-84BEDFEA4713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAPI.Test", "ChatAPI.Test\ChatAPI.Test.csproj", "{7AC5B3B4-A5F4-412A-B048-1129A4D90FE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{718C8031-9153-4AB3-9053-84BEDFEA4713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{718C8031-9153-4AB3-9053-84BEDFEA4713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{718C8031-9153-4AB3-9053-84BEDFEA4713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC5B3B4-A5F4-412A-B048-1129A4D90FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC5B3B4-A5F4-412A-B048-1129A4D90FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC5B3B4-A5F4-412A-B048-1129A4D90FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC5B3B4-A5F4-412A-B048-1129A4D90FE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
