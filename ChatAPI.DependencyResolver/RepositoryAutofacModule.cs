@@ -2,10 +2,6 @@
 using ChatAPI.Core.Repository_Interfaces;
 using ChatAPI.DataRepositories;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace ChatAPI.DependencyResolver
 {
@@ -19,12 +15,12 @@ namespace ChatAPI.DependencyResolver
         }
     }
 
-   /* public class RepositoryAutofacModulel : Module
+    public class RepositoryAutofacModule1 : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             //var databaseInitializer = new MigrateToLatestVersion(new SampleDataSeeder());
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
         }
-    }*/
+    }
 }

@@ -16,6 +16,7 @@ using System.Text;
 using DomainChat.AppSetting;
 using Microsoft.AspNetCore.Http.Connections;
 using Autofac.Extensions.DependencyInjection;
+using ChatAPI.DependencyResolver;
 
 namespace ChatAPI
 {
@@ -54,6 +55,9 @@ namespace ChatAPI
                 }
             );
 
+            //service to frontend
+            services.AddCors();
+
             //Jwt Authentication
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
 
@@ -83,6 +87,12 @@ namespace ChatAPI
             services.AddOptions();
 
             services.AddSwaggerGen();
+        }
+
+        public void ConfigureContainer (ContainerBuilder builder)
+        {
+            builder.RegisterModule(new BusinessAutofacModule1());
+            builder.RegisterModule(new RepositoryAutofacModule1());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
