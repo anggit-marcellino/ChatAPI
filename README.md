@@ -12,3 +12,7 @@
 ![image](https://user-images.githubusercontent.com/62400666/183262888-1cf9d96d-cdfe-4bbc-b2d7-747751dab05d.png)
 # TestChatAPI
 ![Screenshot_3](https://user-images.githubusercontent.com/62400666/183267309-c92bd36a-d0e0-4e57-afef-ea9b24310fc5.png)
+#Doc
+* https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-3.1
+* https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+* https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-3.1&tabs=visual-studio
