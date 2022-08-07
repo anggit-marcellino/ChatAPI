@@ -46,13 +46,13 @@ namespace ChatAPI
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 
             services.Configure<IdentityOptions>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 4;
-                }
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 4;
+            }
             );
 
             //service to frontend
@@ -89,7 +89,7 @@ namespace ChatAPI
             services.AddSwaggerGen();
         }
 
-        public void ConfigureContainer (ContainerBuilder builder)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new BusinessAutofacModule1());
             builder.RegisterModule(new RepositoryAutofacModule1());
@@ -108,13 +108,13 @@ namespace ChatAPI
             app.UseHttpsRedirection();
             app.UseRouting();
 
-             app.UseCors(builder =>
-             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4500")
-             .AllowAnyHeader()
-             .AllowAnyMethod()
-             .AllowCredentials()
+            app.UseCors(builder =>
+            builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4500")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
 
-             );
+            );
 
             // can use the convenience extension method GetAutofacRoot.
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
