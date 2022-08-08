@@ -8,10 +8,19 @@
 ![image](https://user-images.githubusercontent.com/62400666/183267907-4fb3bdd4-4a09-4b63-9304-09fe616b04fb.png)
 * Dan jalankan 
 ![image](https://user-images.githubusercontent.com/62400666/183295240-e60c897a-2814-4c2e-9f6f-e52cba13d7a8.png)
+
 # ChatAPI
 ![image](https://user-images.githubusercontent.com/62400666/183262888-1cf9d96d-cdfe-4bbc-b2d7-747751dab05d.png)
+
 # TestChatAPI
 ![Screenshot_3](https://user-images.githubusercontent.com/62400666/183267309-c92bd36a-d0e0-4e57-afef-ea9b24310fc5.png)
+
+# FrontEnd Preparation:
+* Install Angular CLI
+* npm Install
+* Run Aplikasi (npm Start)
+![image](https://user-images.githubusercontent.com/62400666/183471441-c6c904bd-9d7c-4514-94aa-51151d05b861.png)
+
 # Documentation Used On Mini Project
 * https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-3.1
 * https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
